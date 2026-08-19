@@ -21,3 +21,8 @@ Examples:
 
 ## AI Assistance
 Claude Code may be used to help develop, review, and improve this project.
+## Workflow
+
+- Review changes before committing.
+- Keep commits focused on one change.
+- Use Conventional Commits.
