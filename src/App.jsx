@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import './App.css'
 
 const movies = [
@@ -20,9 +21,119 @@ const movies = [
   { id: 16, title: 'Dune', year: 2021, type: 'Movie', poster: '' },
 ]
 
-function App() {
-  const [page, setPage] = useState('home')
+function Home({ favourites, toggleFavourite }) {
   const [search, setSearch] = useState('')
+
+  const filteredMovies = movies.filter((movie) =>
+    movie.title.toLowerCase().includes(search.toLowerCase())
+  )
+
+  return (
+    <>
+      <h2>Discover Movies & Series</h2>
+
+      <div className="search">
+        <input
+          type="text"
+          placeholder="Search movies..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <button>Search</button>
+      </div>
+
+      <MovieGrid
+        movies={filteredMovies}
+        favourites={favourites}
+        toggleFavourite={toggleFavourite}
+      />
+    </>
+  )
+}
+
+function Favourites({ favourites, toggleFavourite }) {
+  const favouriteMovies = movies.filter((movie) =>
+    favourites.includes(movie.id)
+  )
+
+  return (
+    <>
+      <h2>My Favourites</h2>
+
+      {favouriteMovies.length === 0 ? (
+        <div className="empty">
+          <h3>No favourites yet ❤️</h3>
+          <p>Add some movies to your favourites!</p>
+        </div>
+      ) : (
+        <MovieGrid
+          movies={favouriteMovies}
+          favourites={favourites}
+          toggleFavourite={toggleFavourite}
+        />
+      )}
+    </>
+  )
+}
+
+function Health() {
+  return (
+    <div className="empty">
+      <h2>Health Check</h2>
+      <p>MovieHub is running successfully.</p>
+      <p>Data fetched: {movies.length} movies and series</p>
+    </div>
+  )
+}
+
+function MovieGrid({ movies, favourites, toggleFavourite }) {
+  if (movies.length === 0) {
+    return (
+      <div className="empty">
+        <h3>No movies found</h3>
+        <p>Try searching for another title.</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="movie-grid">
+      {movies.map((movie) => (
+        <div className="movie-card" key={movie.id}>
+          <div className="poster">
+            {movie.poster ? (
+              <img
+                src={movie.poster}
+                alt={movie.title}
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none'
+                  e.currentTarget.parentElement.classList.add('fallback')
+                }}
+              />
+            ) : (
+              <div className="fallback">🎬</div>
+            )}
+          </div>
+
+          <div className="movie-info">
+            <h3>{movie.title}</h3>
+            <p>{movie.year}</p>
+            <span>{movie.type}</span>
+
+            <button
+              className="heart"
+              onClick={() => toggleFavourite(movie.id)}
+            >
+              {favourites.includes(movie.id) ? '❤️' : '🤍'}
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function App() {
   const [favourites, setFavourites] = useState(() => {
     return JSON.parse(localStorage.getItem('favourites')) || []
   })
@@ -36,94 +147,50 @@ function App() {
     localStorage.setItem('favourites', JSON.stringify(updated))
   }
 
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(search.toLowerCase())
-  )
-
-  const displayedMovies =
-    page === 'favourites'
-      ? movies.filter((movie) => favourites.includes(movie.id))
-      : filteredMovies
-
   return (
-    <div className="app">
-      <nav className="navbar">
-        <h1>🎬 MovieHub</h1>
+    <BrowserRouter>
+      <div className="app">
+        <nav className="navbar">
+          <h1>🎬 MovieHub</h1>
 
-        <div className="nav-links">
-          <button onClick={() => setPage('home')}>Home</button>
-          <button onClick={() => setPage('favourites')}>
-            Favourites ({favourites.length})
-          </button>
-        </div>
+          <div className="nav-links">
+            <Link to="/">Home</Link>
+            <Link to="/favourites">
+              Favourites ({favourites.length})
+            </Link>
+            <Link to="/health">Health Check</Link>
+          </div>
+        </nav>
 
-        {page === 'home' && (
-          <div className="search">
-            <input
-              type="text"
-              placeholder="Search movies..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+        <main>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Home
+                  favourites={favourites}
+                  toggleFavourite={toggleFavourite}
+                />
+              }
             />
-            <button>Search</button>
-          </div>
-        )}
-      </nav>
 
-      <main>
-        <h2>{page === 'home' ? 'Discover Movies & Series' : 'My Favourites'}</h2>
+            <Route
+              path="/favourites"
+              element={
+                <Favourites
+                  favourites={favourites}
+                  toggleFavourite={toggleFavourite}
+                />
+              }
+            />
 
-        {displayedMovies.length === 0 ? (
-          <div className="empty">
-            <h3>
-              {page === 'favourites'
-                ? 'No favourites yet ❤️'
-                : 'No movies found'}
-            </h3>
-            <p>
-              {page === 'favourites'
-                ? 'Add some movies to your favourites!'
-                : 'Try searching for another title.'}
-            </p>
-          </div>
-        ) : (
-          <div className="movie-grid">
-            {displayedMovies.map((movie) => (
-              <div className="movie-card" key={movie.id}>
-                <div className="poster">
-                  {movie.poster ? (
-                    <img
-                      src={movie.poster}
-                      alt={movie.title}
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none'
-                        e.currentTarget.parentElement.classList.add('fallback')
-                      }}
-                    />
-                  ) : (
-                    <div className="fallback">🎬</div>
-                  )}
-                </div>
-
-                <div className="movie-info">
-                  <h3>{movie.title}</h3>
-                  <p>{movie.year}</p>
-                  <span>{movie.type}</span>
-
-                  <button
-                    className="heart"
-                    onClick={() => toggleFavourite(movie.id)}
-                  >
-                    {favourites.includes(movie.id) ? '❤️' : '🤍'}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </main>
-    </div>
+            <Route path="/health" element={<Health />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
   )
 }
 
 export default App
+
