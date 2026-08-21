@@ -1,0 +1,11 @@
+# AI-Assisted Workflow Comparison
+
+For Round 1, I used a deliberately vague prompt: “Create a simple settings form with validation.” The AI produced a working settings form with name, email, username, bio, and a notifications toggle. It included basic validation and a usable interface, but the prompt did not specify accessibility requirements, testing, edge cases, or how the project should be structured. This meant I had to rely more heavily on reviewing what the AI generated.
+
+For Round 2, I used a precise prompt that asked the AI to inspect the repository, make a plan, follow specific validation requirements, use controlled React inputs, support keyboard accessibility, handle edge cases, avoid unrelated changes, write tests, and run those tests. The second version included stronger accessibility details such as associated labels, aria attributes, and an accessible notifications switch. It also included a test suite covering valid submission, required name validation, invalid email, invalid username, and the bio character limit. An additional keyboard-accessibility test was also included.
+
+The biggest correctness difference was verification. Round 1 mainly depended on reviewing the generated code, while Round 2 required automated tests and a browser-based check. Round 2 finished with 6/6 tests passing. The precise workflow also caught an AI mistake: the initial Playwright email locator was ambiguous because it matched both the email input and part of the notifications control. This was fixed by using exact label matching.
+
+Accessibility was also better in Round 2 because accessibility requirements were explicitly included in the prompt rather than left to the AI's assumptions. Edge cases were clearer because the precise prompt listed them before implementation.
+
+Overall, the vague prompt was faster to start but required more uncertainty during review. The precise prompt took more effort to write and plan, but it reduced review effort and produced a more thoroughly verified result. This comparison showed me that good AI-assisted development is not just asking AI to write code; it is giving clear specifications, checking the output, testing it, and correcting mistakes.

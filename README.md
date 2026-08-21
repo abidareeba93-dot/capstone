@@ -1,34 +1,16 @@
-# Capstone Project
-## About
-This repository contains my capstone project.
-## Project Goals
-- Build a functional project
-- Follow good coding practices
-- Use AI-assisted development with Claude Code
-## Tech Stack
-To be decided.
-## Getting Started
-> Setup instructions will be finalized once the tech stack is selected. The steps below are a placeholder scaffold.
+# React + Vite
 
-### Prerequisites
-- [ ] To be determined once tech stack is chosen
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-### Installation
-```bash
-# 1. Clone the repository
-git clone <repository-url>
-cd <repository-name>
+Currently, two official plugins are available:
 
-# 2. Install dependencies (command depends on chosen stack)
-# e.g. npm install / pip install -r requirements.txt
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-# 3. Run the project
-# e.g. npm start / python main.py
-```
+## React Compiler
 
-### Notes
-This section will be updated with concrete commands as soon as the tech stack decision is made.
-## License
-This project is licensed under the MIT License.
-## Development Status
-Project setup is complete. Application development will begin next.
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
