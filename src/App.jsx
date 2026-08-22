@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Chat from './Chat'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import './App.css'
 
@@ -47,6 +48,7 @@ function Home({ favourites, toggleFavourite }) {
         favourites={favourites}
         toggleFavourite={toggleFavourite}
       />
+<Chat />
     </>
   )
 }
